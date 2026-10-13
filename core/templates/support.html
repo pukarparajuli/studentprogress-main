@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="text-center mb-5">
+        <h1 class="display-4 text-primary mb-4">Support Center</h1>
+        <p class="lead">We're here to help you succeed</p>
+    </div>
+    
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow mb-4">
+                <div class="card-body p-4">
+                    <h4 class="mb-4">Frequently Asked Questions</h4>
+                    
+                    <div class="accordion" id="faqAccordion">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                                    How do I reset my password?
+                                </button>
+                            </h2>
+                            <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Contact your system administrator to reset your password. They can update your credentials through the admin panel.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                                    How can parents access their child's progress?
+                                </button>
+                            </h2>
+                            <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Parents can log in using their credentials and select the "Parent" role. They will have access to their children's grades, attendance, and reports.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                                    How do teachers add grades?
+                                </button>
+                            </h2>
+                            <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Teachers can log in and use the "Add Grades" feature from their dashboard to enter student marks for different subjects and exam types.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
+                                    Can I export student reports?
+                                </button>
+                            </h2>
+                            <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Yes! Both parents and teachers can download comprehensive student reports in PDF or CSV format from the student report page.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card border-0 shadow">
+                <div class="card-body p-4">
+                    <h4 class="mb-4">Need More Help?</h4>
+                    
+                    <div class="mb-4">
+                        <i class="fas fa-headset text-primary fa-2x mb-3"></i>
+                        <h5>24/7 Support</h5>
+                        <p>Our support team is available around the clock to assist you.</p>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <i class="fas fa-book text-success fa-2x mb-3"></i>
+                        <h5>User Manual</h5>
+                        <p>Comprehensive documentation and tutorials for all features.</p>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <i class="fas fa-video text-info fa-2x mb-3"></i>
+                        <h5>Video Tutorials</h5>
+                        <p>Step-by-step video guides for common tasks and features.</p>
+                    </div>
+                    
+                    <div class="d-grid">
+                        <a href="{% url 'contact' %}" class="btn btn-primary">Contact Support</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

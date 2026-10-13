@@ -1,0 +1,138 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Mark Attendance</h2>
+
+<div class="row">
+    <div class="col-md-10">
+        <div class="card">
+            <div class="card-body">
+
+                <form method="post">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label for="date" class="form-label">Date</label>
+                        <input
+                            type="date"
+                            name="date"
+                            id="date"
+                            class="form-control"
+                            value="{{ today|date:'Y-m-d' }}"
+                            required
+                        >
+                    </div>
+
+                    <h5>Students</h5>
+
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Roll Number</th>
+                                    <th>
+                                        <div class="form-check">
+                                            <input
+                                                type="checkbox"
+                                                id="selectAll"
+                                                class="form-check-input"
+                                            >
+                                            <label
+                                                class="form-check-label"
+                                                for="selectAll"
+                                            >
+                                                Select All
+                                            </label>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for student in students %}
+                                <tr>
+                                    <td>
+                                        {{ student.user.get_full_name }}
+                                    </td>
+
+                                    <td>
+                                        {{ student.roll_number }}
+                                    </td>
+
+                                    <td>
+                                        <div class="form-check">
+                                            <input
+                                                class="form-check-input student-checkbox"
+                                                type="checkbox"
+                                                name="student_{{ student.id }}"
+                                                id="student_{{ student.id }}"
+                                            >
+
+                                            <label
+                                                class="form-check-label"
+                                                for="student_{{ student.id }}"
+                                            >
+                                                Present
+                                            </label>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="3" class="text-center">
+                                        No students found.
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        Mark Attendance
+                    </button>
+
+                    <a href="{% url 'dashboard' %}" class="btn btn-secondary">
+                        Cancel
+                    </a>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const selectAll = document.getElementById('selectAll');
+    const studentCheckboxes = document.querySelectorAll('.student-checkbox');
+
+    // Select or deselect all students
+    selectAll.addEventListener('change', function () {
+        studentCheckboxes.forEach(function (checkbox) {
+            checkbox.checked = selectAll.checked;
+        });
+    });
+
+    // Update Select All when individual checkboxes change
+    studentCheckboxes.forEach(function (checkbox) {
+        checkbox.addEventListener('change', function () {
+            selectAll.checked = Array.from(studentCheckboxes).every(
+                function (item) {
+                    return item.checked;
+                }
+            );
+
+            selectAll.indeterminate =
+                Array.from(studentCheckboxes).some(function (item) {
+                    return item.checked;
+                }) && !selectAll.checked;
+        });
+    });
+});
+</script>
+
+{% endblock %}

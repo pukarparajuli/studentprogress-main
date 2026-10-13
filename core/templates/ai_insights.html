@@ -1,0 +1,194 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>🤖 AI Performance Insights Dashboard</h2>
+
+<!-- Summary Cards -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card border-danger">
+            <div class="card-body text-center">
+                <div class="h2 text-danger">{{ risk_summary.high }}</div>
+                <h6 class="card-title">High Risk Students</h6>
+                <small class="text-muted">Need Immediate Attention</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-warning">
+            <div class="card-body text-center">
+                <div class="h2 text-warning">{{ risk_summary.medium }}</div>
+                <h6 class="card-title">Medium Risk Students</h6>
+                <small class="text-muted">Monitor Closely</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-info">
+            <div class="card-body text-center">
+                <div class="h2 text-info">{{ risk_summary.low }}</div>
+                <h6 class="card-title">Low Risk Students</h6>
+                <small class="text-muted">Minor Concerns</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-success">
+            <div class="card-body text-center">
+                <div class="h2 text-success">{{ risk_summary.on_track }}</div>
+                <h6 class="card-title">On Track Students</h6>
+                <small class="text-muted">Performing Well</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Detailed Analysis -->
+<div class="card">
+    <div class="card-header bg-primary text-white">
+        <h5><i class="fas fa-chart-line"></i> Detailed Student Analysis</h5>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Student</th>
+                        <th>Class</th>
+                        <th>Risk Level</th>
+                        <th>Risk Score</th>
+                        <th>AI Recommendations</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for analysis in student_analysis %}
+                    <tr class="{% if analysis.risk_score >= 70 %}table-danger{% elif analysis.risk_score >= 40 %}table-warning{% elif analysis.risk_score >= 20 %}table-info{% endif %}">
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="me-3">
+                                    {% if analysis.risk_score >= 70 %}
+                                        <i class="fas fa-exclamation-triangle text-danger fa-lg"></i>
+                                    {% elif analysis.risk_score >= 40 %}
+                                        <i class="fas fa-exclamation-circle text-warning fa-lg"></i>
+                                    {% elif analysis.risk_score >= 20 %}
+                                        <i class="fas fa-info-circle text-info fa-lg"></i>
+                                    {% else %}
+                                        <i class="fas fa-check-circle text-success fa-lg"></i>
+                                    {% endif %}
+                                </div>
+                                <div>
+                                    <strong>{{ analysis.student.user.get_full_name }}</strong><br>
+                                    <small class="text-muted">{{ analysis.student.roll_number }}</small>
+                                </div>
+                            </div>
+                        </td>
+                        <td>{{ analysis.student.student_class }}</td>
+                        <td>
+                            <span class="badge bg-{{ analysis.risk_class }} fs-6">{{ analysis.risk_level }}</span>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="progress me-2" style="width: 80px; height: 20px;">
+                                    <div class="progress-bar bg-{{ analysis.risk_class }}" 
+                                         style="width: {{ analysis.risk_score }}%"></div>
+                                </div>
+                                <span class="small">{{ analysis.risk_score|floatformat:0 }}%</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="small">
+                                {% for rec in analysis.recommendations|slice:":2" %}
+                                    <div class="mb-1">
+                                        <i class="fas fa-lightbulb text-warning me-1"></i>
+                                        {{ rec|truncatechars:60 }}
+                                    </div>
+                                {% endfor %}
+                                {% if analysis.recommendations|length > 2 %}
+                                    <small class="text-muted">+{{ analysis.recommendations|length|add:"-2" }} more...</small>
+                                {% endif %}
+                            </div>
+                        </td>
+                        <td>
+                            <a href="{% url 'student_report' analysis.student.id %}" 
+                               class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-eye"></i> View Report
+                            </a>
+                            {% if analysis.risk_score >= 70 %}
+                                <span class="badge bg-danger ms-1">Priority</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Enhanced AI Features -->
+<div class="mt-4">
+    <div class="card">
+        <div class="card-header bg-gradient">
+            <h6><i class="fas fa-robot"></i> Advanced AI Features Available</h6>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="text-center mb-3">
+                        <i class="fas fa-brain fa-3x text-primary mb-2"></i>
+                        <h6>Performance Risk Prediction</h6>
+                        <p class="small text-muted">Multi-factor analysis combining grades (40%), attendance (35%), and trends (25%) to predict student failure risk.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="text-center mb-3">
+                        <i class="fas fa-chart-line fa-3x text-success mb-2"></i>
+                        <h6>Automated Grade Analysis</h6>
+                        <p class="small text-muted">Intelligent grade trend analysis, subject-wise performance insights, and personalized improvement recommendations.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="text-center mb-3">
+                        <i class="fas fa-calendar-alt fa-3x text-warning mb-2"></i>
+                        <h6>Smart Attendance Patterns</h6>
+                        <p class="small text-muted">Detects attendance patterns, predicts future absences, and identifies day-specific absence trends.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row mt-4">
+                <div class="col-12">
+                    <div class="alert alert-info">
+                        <h6><i class="fas fa-lightbulb"></i> AI Capabilities:</h6>
+                        <ul class="mb-0">
+                            <li><strong>Risk Assessment:</strong> Identifies students needing immediate attention</li>
+                            <li><strong>Pattern Recognition:</strong> Detects Monday/Friday absence patterns, consecutive absences</li>
+                            <li><strong>Trend Analysis:</strong> Tracks improving/declining performance over time</li>
+                            <li><strong>Personalized Recommendations:</strong> Generates specific action items for each student</li>
+                            <li><strong>Predictive Analytics:</strong> Forecasts future attendance and performance issues</li>
+                            <li><strong>Subject-wise Insights:</strong> Analyzes performance across different subjects</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.progress {
+    background-color: #e9ecef;
+}
+.table-hover tbody tr:hover {
+    background-color: rgba(0,0,0,.075);
+}
+.fs-6 {
+    font-size: 0.875rem;
+}
+.bg-gradient {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+</style>
+{% endblock %}

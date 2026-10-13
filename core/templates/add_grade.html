@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Add Grade</h2>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <form method="post">
+                    <div class="mb-3">
+                        <label for="student" class="form-label">Student</label>
+                        <select name="student" class="form-select" required>
+                            <option value="">Select Student</option>
+                            {% for student in students %}
+                                <option value="{{ student.id }}">{{ student.user.get_full_name }} - {{ student.roll_number }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="subject" class="form-label">Subject</label>
+                        <select name="subject" class="form-select" required>
+                            <option value="">Select Subject</option>
+                            {% for subject in subjects %}
+                                <option value="{{ subject.id }}">{{ subject.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="marks" class="form-label">Marks Obtained</label>
+                                <input type="number" name="marks" class="form-control" step="0.01" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="max_marks" class="form-label">Maximum Marks</label>
+                                <input type="number" name="max_marks" class="form-control" value="100" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="exam_type" class="form-label">Exam Type</label>
+                        <select name="exam_type" class="form-select" required>
+                            <option value="Test">Test</option>
+                            <option value="Quiz">Quiz</option>
+                            <option value="Assignment">Assignment</option>
+                            <option value="Mid Term">Mid Term</option>
+                            <option value="Final">Final</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Grade</button>
+                    <a href="{% url 'dashboard' %}" class="btn btn-secondary">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

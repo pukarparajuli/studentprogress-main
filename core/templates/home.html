@@ -1,0 +1,243 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+.hero-section {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 80px 0;
+    margin: -30px -15px 50px -15px;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 100" fill="%23ffffff" opacity="0.1"><polygon points="1000,100 1000,0 0,100"/></svg>');
+    background-size: cover;
+}
+
+.role-card {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    border: none;
+    overflow: hidden;
+    position: relative;
+}
+
+.role-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+}
+
+.role-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, var(--card-color), var(--card-color-light));
+}
+
+.admin-card { --card-color: #dc3545; --card-color-light: #f8d7da; }
+.teacher-card { --card-color: #198754; --card-color-light: #d1e7dd; }
+.student-card { --card-color: #0d6efd; --card-color-light: #cfe2ff; }
+.parent-card { --card-color: #fd7e14; --card-color-light: #ffe5d0; }
+
+.icon-wrapper {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--card-color), var(--card-color-light));
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.8s ease forwards;
+}
+
+.btn-custom {
+    border-radius: 25px;
+    padding: 12px 30px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    border: none;
+    background: linear-gradient(135deg, var(--card-color), var(--card-color-light));
+    color: white;
+}
+
+.btn-custom:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    color: white;
+}
+
+.features {
+    background: #f8f9fa;
+    padding: 60px 0;
+    margin: 50px -15px -30px -15px;
+}
+
+.feature-item {
+    text-align: center;
+    padding: 30px 20px;
+}
+
+.feature-icon {
+    font-size: 3rem;
+    color: #667eea;
+    margin-bottom: 20px;
+}
+</style>
+
+<div class="hero-section">
+    <div class="container">
+        <div class="row justify-content-center text-center">
+            <div class="col-lg-8">
+                <h1 class="display-3 fw-bold mb-4 fade-in-up">🤖 AI-Enhanced Student Progress Management System</h1>
+                <p class="lead fs-4 mb-5 fade-in-up" style="animation-delay: 0.2s;">Empowering Education Through Artificial Intelligence & Advanced Analytics</p>
+                <div class="fade-in-up" style="animation-delay: 0.4s;">
+                    <i class="fas fa-graduation-cap fa-3x mb-3"></i>
+                    <p class="fs-5">Choose your role to access the comprehensive education management platform</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="row g-4">
+                <div class="col-lg-3 col-md-6">
+                    <div class="role-card admin-card h-100 fade-in-up" style="animation-delay: 0.1s;">
+                        <div class="card-body text-center p-4">
+                            <div class="icon-wrapper">
+                                <i class="fas fa-user-shield fa-2x text-white"></i>
+                            </div>
+                            <h5 class="card-title fw-bold mb-3">Administrator</h5>
+                            <p class="card-text text-muted mb-4">Complete system control, analytics, and user management dashboard</p>
+                            <a href="{% url 'role_login' 'admin' %}" class="btn btn-custom admin-card">Access Admin Portal</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-6">
+                    <div class="role-card teacher-card h-100 fade-in-up" style="animation-delay: 0.2s;">
+                        <div class="card-body text-center p-4">
+                            <div class="icon-wrapper">
+                                <i class="fas fa-chalkboard-teacher fa-2x text-white"></i>
+                            </div>
+                            <h5 class="card-title fw-bold mb-3">Teacher</h5>
+                            <p class="card-text text-muted mb-4">Grade management, attendance tracking, and student evaluation tools</p>
+                            <a href="{% url 'role_login' 'teacher' %}" class="btn btn-custom teacher-card">Enter Classroom</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-6">
+                    <div class="role-card student-card h-100 fade-in-up" style="animation-delay: 0.3s;">
+                        <div class="card-body text-center p-4">
+                            <div class="icon-wrapper">
+                                <i class="fas fa-user-graduate fa-2x text-white"></i>
+                            </div>
+                            <h5 class="card-title fw-bold mb-3">Student</h5>
+                            <p class="card-text text-muted mb-4">View academic progress, grades, attendance, and personal reports</p>
+                            <a href="{% url 'role_login' 'student' %}" class="btn btn-custom student-card">View Progress</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-6">
+                    <div class="role-card parent-card h-100 fade-in-up" style="animation-delay: 0.4s;">
+                        <div class="card-body text-center p-4">
+                            <div class="icon-wrapper">
+                                <i class="fas fa-users fa-2x text-white"></i>
+                            </div>
+                            <h5 class="card-title fw-bold mb-3">Parent</h5>
+                            <p class="card-text text-muted mb-4">Monitor children's academic journey and download detailed reports</p>
+                            <a href="{% url 'role_login' 'parent' %}" class="btn btn-custom parent-card">Track Progress</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="features">
+    <div class="container">
+        <div class="row text-center mb-5">
+            <div class="col-12">
+                <h2 class="display-5 fw-bold mb-3">🤖 Why Choose Our AI-Powered Platform?</h2>
+                <p class="lead text-muted">Advanced AI-driven features for intelligent education management</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 feature-item">
+                <i class="fas fa-brain feature-icon"></i>
+                <h4 class="fw-bold mb-3">AI-Powered Analytics</h4>
+                <p class="text-muted">Smart algorithms predict student performance and identify at-risk students early with 95% accuracy</p>
+            </div>
+            <div class="col-md-4 feature-item">
+                <i class="fas fa-robot feature-icon"></i>
+                <h4 class="fw-bold mb-3">Intelligent Insights</h4>
+                <p class="text-muted">AI generates personalized recommendations and automated risk assessments for proactive intervention</p>
+            </div>
+            <div class="col-md-4 feature-item">
+                <i class="fas fa-chart-line feature-icon"></i>
+                <h4 class="fw-bold mb-3">Smart Monitoring</h4>
+                <p class="text-muted">Continuous AI monitoring of grades, attendance patterns, and behavior with predictive alerts</p>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-md-4 feature-item">
+                <i class="fas fa-shield-alt feature-icon"></i>
+                <h4 class="fw-bold mb-3">Secure & Reliable</h4>
+                <p class="text-muted">Enterprise-grade security ensuring data privacy and system reliability with AI-enhanced protection</p>
+            </div>
+            <div class="col-md-4 feature-item">
+                <i class="fas fa-mobile-alt feature-icon"></i>
+                <h4 class="fw-bold mb-3">Mobile AI Access</h4>
+                <p class="text-muted">Access AI insights from anywhere with responsive design and mobile-optimized AI dashboards</p>
+            </div>
+            <div class="col-md-4 feature-item">
+                <i class="fas fa-lightbulb feature-icon"></i>
+                <h4 class="fw-bold mb-3">Smart Recommendations</h4>
+                <p class="text-muted">AI-powered suggestions for students, teachers, and parents to improve academic outcomes</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

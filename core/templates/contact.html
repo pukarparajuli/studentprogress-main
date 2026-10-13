@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="text-center mb-5">
+        <h1 class="display-4 text-primary mb-4">Contact Us</h1>
+        <p class="lead">Get in touch with our team</p>
+    </div>
+    
+    <div class="row">
+        <div class="col-lg-8 mb-4">
+            <div class="card border-0 shadow">
+                <div class="card-body p-4">
+                    <h4 class="mb-4">Send us a Message</h4>
+                    <form>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Full Name</label>
+                                <input type="text" name="name" class="form-control" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Email Address</label>
+                                <input type="email" name="email" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Subject</label>
+                            <input type="text" name="subject" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Message</label>
+                            <textarea name="message" class="form-control" rows="5" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card border-0 shadow h-100">
+                <div class="card-body p-4">
+                    <h4 class="mb-4">Contact Information</h4>
+                    
+                    <div class="mb-4">
+                        <i class="fas fa-map-marker-alt text-primary me-3"></i>
+                        <strong>Address:</strong><br>
+                        Mulpani, Kathmandu <br>
+                        Kathmandu City, KC 1127
+                    </div>
+                    
+                    <div class="mb-4">
+                        <i class="fas fa-phone text-success me-3"></i>
+                        <strong>Phone:</strong><br>
+                        +977 9848921367
+                    </div>
+                    
+                    <div class="mb-4">
+                        <i class="fas fa-envelope text-info me-3"></i>
+                        <strong>Email:</strong><br>
+                        info@spms.edu
+                    </div>
+                    
+                    <div class="mb-4">
+                        <i class="fas fa-clock text-warning me-3"></i>
+                        <strong>Office Hours:</strong><br>
+                        Sun - Fri: 10:00 AM - 5:00 PM
+                    </div>
+                    
+                    <div class="social-icons">
+                        <h5 class="mb-3">Follow Us</h5>
+                        <a href="#" class="btn btn-outline-primary btn-sm me-2"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="btn btn-outline-info btn-sm me-2"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="btn btn-outline-primary btn-sm me-2"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="btn btn-outline-danger btn-sm"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

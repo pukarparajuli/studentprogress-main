@@ -1,0 +1,185 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>🤖 AI-Enhanced Admin Dashboard</h2>
+
+<!-- System Statistics -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card text-white bg-primary">
+            <div class="card-body text-center">
+                <i class="fas fa-users fa-2x mb-2"></i>
+                <h5>Total Students</h5>
+                <h3>{{ total_students }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-success">
+            <div class="card-body text-center">
+                <i class="fas fa-chalkboard-teacher fa-2x mb-2"></i>
+                <h5>Total Teachers</h5>
+                <h3>{{ total_teachers }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-info">
+            <div class="card-body text-center">
+                <i class="fas fa-calendar-check fa-2x mb-2"></i>
+                <h5>Avg Attendance</h5>
+                <h3>{{ avg_attendance|floatformat:1 }}%</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-warning">
+            <div class="card-body text-center">
+                <i class="fas fa-chart-line fa-2x mb-2"></i>
+                <h5>Avg Marks</h5>
+                <h3>{{ avg_marks|floatformat:1 }}</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- AI Risk Analysis Summary -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card border-primary">
+            <div class="card-header bg-primary text-white">
+                <h5><i class="fas fa-brain"></i> AI Risk Analysis - System Overview</h5>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-md-3">
+                        <div class="card border-danger">
+                            <div class="card-body">
+                                <i class="fas fa-exclamation-triangle fa-2x text-danger mb-2"></i>
+                                <h4 class="text-danger">{{ ai_summary.high }}</h4>
+                                <h6>High Risk Students</h6>
+                                <small class="text-muted">Need Immediate Attention</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card border-warning">
+                            <div class="card-body">
+                                <i class="fas fa-exclamation-circle fa-2x text-warning mb-2"></i>
+                                <h4 class="text-warning">{{ ai_summary.medium }}</h4>
+                                <h6>Medium Risk Students</h6>
+                                <small class="text-muted">Monitor Closely</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card border-info">
+                            <div class="card-body">
+                                <i class="fas fa-info-circle fa-2x text-info mb-2"></i>
+                                <h4 class="text-info">{{ ai_summary.low }}</h4>
+                                <h6>Low Risk Students</h6>
+                                <small class="text-muted">Minor Concerns</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card border-success">
+                            <div class="card-body">
+                                <i class="fas fa-check-circle fa-2x text-success mb-2"></i>
+                                <h4 class="text-success">{{ ai_summary.on_track }}</h4>
+                                <h6>On Track Students</h6>
+                                <small class="text-muted">Performing Well</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- System Management -->
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-cogs"></i> System Management</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a href="/admin/" class="btn btn-primary">
+                        <i class="fas fa-tools"></i> Django Admin Panel
+                    </a>
+                    <a href="{% url 'ai_insights' %}" class="btn btn-warning">
+                        <i class="fas fa-brain"></i> Detailed AI Insights
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-chart-bar"></i> Quick Stats</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-6">
+                        <small class="text-muted">Total Classes:</small><br>
+                        <strong class="h5">{{ total_classes }}</strong>
+                    </div>
+                    <div class="col-6">
+                        <small class="text-muted">Total Subjects:</small><br>
+                        <strong class="h5">{{ total_subjects }}</strong>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-6">
+                        <small class="text-muted">System Status:</small><br>
+                        <span class="badge bg-success">Active</span>
+                    </div>
+                    <div class="col-6">
+                        <small class="text-muted">AI Status:</small><br>
+                        <span class="badge bg-primary">Monitoring</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- AI Features Overview -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card border-info">
+            <div class="card-header bg-info text-white">
+                <h6><i class="fas fa-robot"></i> AI System Capabilities</h6>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h6>🎯 Performance Prediction</h6>
+                        <p class="small text-muted">AI analyzes student data to predict academic outcomes and identify at-risk students early.</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h6>📊 Automated Analysis</h6>
+                        <p class="small text-muted">Continuous monitoring of grades, attendance, and behavior patterns with intelligent insights.</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h6>💡 Smart Recommendations</h6>
+                        <p class="small text-muted">Personalized suggestions for students, teachers, and parents to improve academic outcomes.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Action Buttons -->
+<div class="text-center">
+    <a href="{% url 'logout' %}" class="btn btn-secondary btn-lg">
+        <i class="fas fa-sign-out-alt"></i> Logout
+    </a>
+</div>
+{% endblock %}

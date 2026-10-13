@@ -1,0 +1,209 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>🤖 AI-Enhanced Student Dashboard</h2>
+
+<!-- AI Performance Insights -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card border-{{ ai_analysis.overall_status.color }}">
+            <div class="card-header bg-{{ ai_analysis.overall_status.color }} text-white">
+                <h5><i class="{{ ai_analysis.overall_status.icon }}"></i> AI Performance Analysis</h5>
+            </div>
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-md-3">
+                        <div class="text-center">
+                            <div class="progress mx-auto" style="width: 100px; height: 100px; border-radius: 50%; position: relative;">
+                                <div class="progress-bar bg-{{ ai_analysis.risk_class }}" 
+                                     style="width: {{ ai_analysis.risk_score }}%; height: 100%; border-radius: 50%;"></div>
+                                <div class="position-absolute top-50 start-50 translate-middle">
+                                    <div class="h4 mb-0">{{ ai_analysis.risk_score|floatformat:0 }}%</div>
+                                    <small>Risk Score</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="text-center">
+                            <h4><span class="badge bg-{{ ai_analysis.overall_status.color }}">{{ ai_analysis.overall_status.status }}</span></h4>
+                            <p class="mb-0 small">{{ ai_analysis.overall_status.message }}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <h6><i class="fas fa-lightbulb"></i> AI Recommendations:</h6>
+                        <ul class="list-unstyled">
+                            {% for suggestion in ai_analysis.improvement_suggestions|slice:":3" %}
+                                <li class="mb-2"><i class="fas fa-check-circle text-success"></i> {{ suggestion }}</li>
+                            {% endfor %}
+                        </ul>
+                        <div class="mt-3">
+                            <a href="{% url 'student_ai_analysis' student.id %}" class="btn btn-sm btn-warning">
+                                <i class="fas fa-brain"></i> Detailed AI Analysis
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Enhanced Analytics Cards -->
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card border-primary">
+            <div class="card-header bg-primary text-white">
+                <h6><i class="fas fa-chart-line"></i> Grade Analysis</h6>
+            </div>
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span>Average Score:</span>
+                    <span class="h5 mb-0 text-primary">{{ ai_analysis.grade_analysis.average }}%</span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span>Trend:</span>
+                    <span class="badge bg-{% if ai_analysis.grade_analysis.trend == 'Improving' %}success{% elif ai_analysis.grade_analysis.trend == 'Declining' %}danger{% else %}secondary{% endif %}">
+                        {{ ai_analysis.grade_analysis.trend }}
+                    </span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                    <span>Class Rank:</span>
+                    <span class="fw-bold">{{ ai_analysis.grade_analysis.class_rank }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card border-success">
+            <div class="card-header bg-success text-white">
+                <h6><i class="fas fa-calendar-check"></i> Attendance Analysis</h6>
+            </div>
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span>Attendance Rate:</span>
+                    <span class="h5 mb-0 text-success">{{ ai_analysis.attendance_analysis.attendance_rate }}%</span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span>Risk Level:</span>
+                    <span class="badge bg-{% if ai_analysis.attendance_analysis.risk_level == 'High' %}danger{% elif ai_analysis.attendance_analysis.risk_level == 'Medium' %}warning{% else %}success{% endif %}">
+                        {{ ai_analysis.attendance_analysis.risk_level }}
+                    </span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                    <span>Pattern:</span>
+                    <span class="fw-bold small">{{ ai_analysis.attendance_analysis.pattern|truncatechars:15 }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card border-info">
+            <div class="card-header bg-info text-white">
+                <h6><i class="fas fa-brain"></i> AI Insights</h6>
+            </div>
+            <div class="card-body">
+                <div class="small">
+                    {% for insight in ai_analysis.grade_analysis.insights|slice:":2" %}
+                        <div class="mb-2">{{ insight }}</div>
+                    {% endfor %}
+                    {% for insight in ai_analysis.attendance_analysis.insights|slice:":1" %}
+                        <div class="mb-2">{{ insight }}</div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Recent Grades</h5>
+            </div>
+            <div class="card-body">
+                {% for grade in grades|slice:":5" %}
+                    <div class="d-flex justify-content-between">
+                        <span>{{ grade.subject.name }}</span>
+                        <span class="badge bg-primary">{{ grade.marks }}/{{ grade.max_marks }}</span>
+                    </div>
+                    <hr>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Recent Attendance</h5>
+            </div>
+            <div class="card-body">
+                {% for att in attendance %}
+                    <div class="d-flex justify-content-between">
+                        <span>{{ att.date }}</span>
+                        <span class="badge {% if att.is_present %}bg-success{% else %}bg-danger{% endif %}">
+                            {% if att.is_present %}Present{% else %}Absent{% endif %}
+                        </span>
+                    </div>
+                    <hr>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-4">
+    <div class="card">
+        <div class="card-header">
+            <h5>Behavior & Performance</h5>
+        </div>
+        <div class="card-body">
+            {% if behaviors %}
+                {% for behavior in behaviors %}
+                <div class="alert alert-{% if behavior.behavior_type == 'excellent' %}success{% elif behavior.behavior_type == 'good' %}info{% elif behavior.behavior_type == 'average' %}warning{% else %}danger{% endif %} mb-2">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <strong>{{ behavior.behavior_type|title }}</strong>
+                            <p class="mb-1">{{ behavior.notes }}</p>
+                            <small>By: {{ behavior.teacher.user.get_full_name }} on {{ behavior.date }}</small>
+                        </div>
+                        <div>
+                            {% if behavior.behavior_type == 'excellent' %}
+                                <i class="fas fa-star text-warning fa-2x"></i>
+                            {% elif behavior.behavior_type == 'good' %}
+                                <i class="fas fa-thumbs-up text-success fa-2x"></i>
+                            {% elif behavior.behavior_type == 'average' %}
+                                <i class="fas fa-minus-circle text-warning fa-2x"></i>
+                            {% else %}
+                                <i class="fas fa-exclamation-triangle text-danger fa-2x"></i>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p class="text-muted">No behavior records yet.</p>
+            {% endif %}
+        </div>
+    </div>
+    
+    <div class="text-center mt-3 mb-3">
+        <a href="{% url 'logout' %}" class="btn btn-secondary">Logout</a>
+    </div>
+    
+    <div class="card">
+        <div class="card-header">
+            <h5>Teacher Comments</h5>
+        </div>
+        <div class="card-body">
+            {% for behavior in behaviors %}
+                <div class="alert alert-info">
+                    <strong>{{ behavior.behavior_type|title }}</strong> - {{ behavior.notes }}
+                    <small class="text-muted d-block">{{ behavior.date }}</small>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>🤖 AI-Enhanced Teacher Dashboard</h2>
+
+<!-- AI Alert Section -->
+{% if high_risk_students %}
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
+    <h5><i class="fas fa-exclamation-triangle"></i> AI Alert: Students Need Attention</h5>
+    <p><strong>{{ high_risk_students|length }}</strong> student(s) are identified as high-risk and may need immediate intervention.</p>
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+</div>
+{% endif %}
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Quick Actions</h5>
+            </div>
+            <div class="card-body">
+                <a href="{% url 'add_grade' %}" class="btn btn-primary mb-2 d-block">Add Grades</a>
+                <a href="{% url 'mark_attendance' %}" class="btn btn-success mb-2 d-block">Mark Attendance</a>
+                <a href="{% url 'teacher_reports' %}" class="btn btn-info mb-2 d-block">Generate Reports</a>
+                <a href="{% url 'ai_insights' %}" class="btn btn-warning mb-2 d-block">🤖 AI Insights</a>
+                <a href="{% url 'logout' %}" class="btn btn-secondary d-block">Logout</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Your Subjects</h5>
+            </div>
+            <div class="card-body">
+                {% for subject in subjects %}
+                    <span class="badge bg-secondary me-1">{{ subject.name }}</span>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- AI Insights Section -->
+<div class="mt-4">
+    <div class="card border-primary">
+        <div class="card-header bg-primary text-white">
+            <h5><i class="fas fa-brain"></i> AI Performance Insights</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="text-center">
+                        <div class="h3 text-danger">{{ high_risk_students|length }}</div>
+                        <small class="text-muted">High Risk</small>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="text-center">
+                        <div class="h3 text-warning">{% for s in student_risks %}{% if s.risk_score >= 40 and s.risk_score < 70 %}{{ forloop.counter0|add:1 }}{% endif %}{% endfor %}</div>
+                        <small class="text-muted">Medium Risk</small>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="text-center">
+                        <div class="h3 text-info">{% for s in student_risks %}{% if s.risk_score >= 20 and s.risk_score < 40 %}{{ forloop.counter0|add:1 }}{% endif %}{% endfor %}</div>
+                        <small class="text-muted">Low Risk</small>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="text-center">
+                        <div class="h3 text-success">{% for s in student_risks %}{% if s.risk_score < 20 %}{{ forloop.counter0|add:1 }}{% endif %}{% endfor %}</div>
+                        <small class="text-muted">On Track</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-4">
+    <h4>🎯 AI-Powered Student Analysis</h4>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Roll Number</th>
+                    <th>Class</th>
+                    <th>AI Risk Level</th>
+                    <th>Risk Score</th>
+                    <th>AI Recommendations</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for risk_data in student_risks %}
+                <tr>
+                    <td>{{ risk_data.student.user.get_full_name }}</td>
+                    <td>{{ risk_data.student.roll_number }}</td>
+                    <td>{{ risk_data.student.student_class }}</td>
+                    <td>
+                        <span class="badge bg-{{ risk_data.risk_class }}">{{ risk_data.risk_level }}</span>
+                    </td>
+                    <td>
+                        <div class="progress" style="width: 60px; height: 20px;">
+                            <div class="progress-bar bg-{{ risk_data.risk_class }}" 
+                                 style="width: {{ risk_data.risk_score }}%" 
+                                 title="{{ risk_data.risk_score }}%"></div>
+                        </div>
+                        <small>{{ risk_data.risk_score|floatformat:0 }}%</small>
+                    </td>
+                    <td>
+                        <div class="small">
+                            {% for rec in risk_data.recommendations %}
+                                <div class="mb-1">{{ rec }}</div>
+                            {% endfor %}
+                        </div>
+                    </td>
+                    <td>
+                        <a href="{% url 'student_report' risk_data.student.id %}" class="btn btn-sm btn-info me-1">View Report</a>
+                        <a href="{% url 'student_ai_analysis' risk_data.student.id %}" class="btn btn-sm btn-warning">🤖 AI Analysis</a>
+                        {% if risk_data.risk_score >= 70 %}
+                            <span class="badge bg-danger ms-1 d-block mt-1">Priority</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+.progress {
+    background-color: #e9ecef;
+}
+.badge {
+    font-size: 0.75em;
+}
+.small {
+    font-size: 0.8em;
+    line-height: 1.2;
+}
+</style>
+{% endblock %}

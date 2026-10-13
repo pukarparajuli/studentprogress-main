@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>🤖 AI-Enhanced Parent Dashboard</h2>
+    <a href="{% url 'logout' %}" class="btn btn-secondary">Logout</a>
+</div>
+
+<!-- AI Summary Alert -->
+{% if children_analysis %}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="alert alert-info">
+            <h5><i class="fas fa-brain"></i> AI Monitoring Summary</h5>
+            <p>AI is continuously monitoring your children's academic progress and will alert you to any concerns.</p>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Children Cards with AI Analysis -->
+<div class="row">
+    {% for child_data in children_analysis %}
+    <div class="col-md-6 mb-4">
+        <div class="card border-{{ child_data.ai_analysis.overall_status.color }}">
+            <div class="card-header bg-{{ child_data.ai_analysis.overall_status.color }} text-white">
+                <h5 class="mb-0">{{ child_data.child.user.get_full_name }}</h5>
+                <small>Roll: {{ child_data.child.roll_number }} | Class: {{ child_data.child.student_class }}</small>
+            </div>
+            <div class="card-body">
+                <!-- AI Status -->
+                <div class="row mb-3">
+                    <div class="col-6">
+                        <div class="text-center">
+                            <div class="h4 text-{{ child_data.ai_analysis.overall_status.color }}">
+                                {{ child_data.ai_analysis.risk_score|floatformat:0 }}%
+                            </div>
+                            <small class="text-muted">Risk Score</small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="text-center">
+                            <span class="badge bg-{{ child_data.ai_analysis.overall_status.color }} fs-6">
+                                {{ child_data.ai_analysis.overall_status.status }}
+                            </span>
+                            <br><small class="text-muted">AI Status</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Stats -->
+                {% if child_data.ai_analysis.grade_analysis %}
+                <div class="row mb-3">
+                    <div class="col-6">
+                        <small class="text-muted">Grade Average:</small><br>
+                        <strong class="text-primary">{{ child_data.ai_analysis.grade_analysis.average }}%</strong>
+                    </div>
+                    <div class="col-6">
+                        <small class="text-muted">Attendance:</small><br>
+                        <strong class="text-success">{{ child_data.ai_analysis.attendance_analysis.attendance_rate }}%</strong>
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- AI Insights -->
+                {% if child_data.ai_analysis.improvement_suggestions %}
+                <div class="mb-3">
+                    <h6><i class="fas fa-lightbulb text-warning"></i> AI Recommendations:</h6>
+                    <ul class="list-unstyled small">
+                        {% for suggestion in child_data.ai_analysis.improvement_suggestions|slice:":2" %}
+                            <li class="mb-1">• {{ suggestion }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+
+                <!-- Action Buttons -->
+                <div class="d-grid gap-2">
+                    <a href="{% url 'student_report' child_data.child.id %}" class="btn btn-primary btn-sm">
+                        <i class="fas fa-chart-line"></i> View Full Report
+                    </a>
+                    <div class="row">
+                        <div class="col-6">
+                            <a href="{% url 'student_ai_analysis' child_data.child.id %}" class="btn btn-warning btn-sm w-100">
+                                <i class="fas fa-brain"></i> AI Analysis
+                            </a>
+                        </div>
+                        <div class="col-6">
+                            <a href="{% url 'export_pdf' child_data.child.id %}" class="btn btn-secondary btn-sm w-100">
+                                <i class="fas fa-download"></i> PDF Report
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <div class="alert alert-info">
+            <h5>No Children Assigned</h5>
+            <p>Please contact the administrator to link your children to your account.</p>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- AI Features Info -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card border-info">
+            <div class="card-header bg-info text-white">
+                <h6><i class="fas fa-info-circle"></i> AI Monitoring Features</h6>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h6>📊 Performance Tracking</h6>
+                        <p class="small text-muted">AI monitors grades and identifies learning patterns to predict academic outcomes.</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h6>📅 Attendance Analysis</h6>
+                        <p class="small text-muted">Smart detection of attendance patterns and early warning for potential issues.</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h6>💡 Personalized Recommendations</h6>
+                        <p class="small text-muted">AI generates specific suggestions to help improve your child's academic performance.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.fs-6 {
+    font-size: 0.875rem;
+}
+</style>
+{% endblock %}
